@@ -1,0 +1,48 @@
+'GARDEN by @KevinSavetz - May 23 2019
+'inspired by @arjanvandermeij's "8 bits binary flowers"
+'https://twitter.com/arjanvandermeij/status/1108485237296762880
+
+GRAPHICS 8+16:POKE 710,0
+MAXX=319:MAXY=191
+W=4:H=12.5
+
+DO
+	FOR YAXIS=40 TO MAXY-W STEP 30 
+		FOR XAXIS=40 TO MAXX-H STEP 30
+			IF(RAND(10)=0)
+				X=XAXIS:Y=YAXIS
+				X1=X+W:Y1=Y+H
+
+				COLOR 0
+				FOR YY=YAXIS-H TO YAXIS+H
+					PLOT XAXIS-H,YY
+					DRAWTO XAXIS+H,YY
+				NEXT YY
+		
+				COLOR 1
+				FOR ANGLE=0 TO 157.5 STEP 22.5
+					IF (RAND(2)=0)
+						RADANG=ANGLE*.01745:'CONVERT DEGREES TO RADIANS. .01745 IS (3.14159/180)
+						FOR A = 0 TO 6.28318 STEP 2/H
+							X1=X+COS(A)*W
+							Y1=Y+SIN(A)*H
+
+							'Rotation code from Bruce Artwick's book
+							'Microcomputer Displays, Graphics and Animation
+							ROTX=XAXIS+((X1-XAXIS)*COS(RADANG)-(Y1-YAXIS)*SIN(RADANG))
+							ROTY=YAXIS+((X1-XAXIS)*SIN(RADANG)+(Y1-YAXIS)*COS(RADANG))
+
+							IF (A=0)
+								PLOT ROTX,ROTY
+								IX=ROTX:IY=ROTY
+							ELSE
+								DRAWTO ROTX,ROTY
+							ENDIF
+						NEXT A
+						DRAWTO IX,IY
+					ENDIF
+				NEXT ANGLE
+			ENDIF	
+		NEXT XAXIS
+	NEXT YAXIS
+LOOP
